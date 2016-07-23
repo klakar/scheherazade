@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/plugins/story" >
+        <file>icon.png</file>
+    </qresource>
+</RCC>
