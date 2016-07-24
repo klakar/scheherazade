@@ -31,6 +31,7 @@ import os.path
 
 # Import QGIS gui stuff
 from qgis.core import QgsMessageLog
+#from qgis.gui import QgsMapCanvas
 
 
 
@@ -220,16 +221,18 @@ class story:
     """
 
     def navigateNext(self):
-    	global currentSlide
+    	global currentSlide, slideTitle
     	self.save_current_slide()
-    	currentSlide += 1
+    	if (currentSlide < len(slideTitle) - 1):
+    		currentSlide += 1
     	self.open_current_slide()
     	#QgsMessageLog.logMessage("Current slide is: %s " % (currentSlide), 'Story', QgsMessageLog.INFO)
  
     def navigatePrevious(self):
     	global currentSlide
     	self.save_current_slide()
-    	currentSlide -= 1
+    	if (currentSlide > 0):
+    		currentSlide -= 1
     	self.open_current_slide()
     	#QgsMessageLog.logMessage("Current slide is: %s " % (currentSlide), 'Story', QgsMessageLog.INFO)
     
@@ -243,10 +246,10 @@ class story:
     	global currentSlide
     	self.save_current_slide
     	currentSlide += 1
-    	slideTitle.insert(currentSlide, self.tr("Title"))
+    	slideTitle.insert(currentSlide, self.tr("Slide Title"))
     	slideContent.insert(currentSlide, self.tr("Content"))
     	slideZoom.insert(currentSlide, 18)
-    	slidePosition.insert(currentSlide, "15,65")
+    	slidePosition.insert(currentSlide, self.get_current_slide())
     	self.open_current_slide()
     	#QgsMessageLog.logMessage("Current slide is: %s " % (currentSlide), 'Story', QgsMessageLog.INFO)
 
@@ -257,22 +260,31 @@ class story:
     	QMessageBox.information(self.iface.mainWindow(),self.tr(u"Message!"), self.tr(u"This is a test..."))
     
     def create_story(self):
-    	QMessageBox.information(self.iface.mainWindow(),self.tr(u"Message!"), self.tr(u"This is a test..."))
+    	global slideTitle
+    	#QMessageBox.information(self.iface.mainWindow(),self.tr(u"Message!"), self.tr(u"Number of Slides: %s" % (len(slideTitle)))
     	
     def save_current_slide(self):
-    	global currentSlide
-    	QgsMessageLog.logMessage("Current slide is: %s " % (currentSlide), 'Story', QgsMessageLog.INFO)
+    	global currentSlide, slideTitle, slideContent, slideZoom, slidePosition
+    	#QgsMessageLog.logMessage("Count: %s Current Index: %s " % (len(slideTitle), currentSlide), 'Story', QgsMessageLog.INFO)
     	slideTitle[currentSlide] = self.dockwidget.txtSlideTitle.text()
     	slideContent[currentSlide] = self.dockwidget.txtSlideContent.toPlainText()
+    	slideZoom[currentSlide] = self.dockwidget.spinSlideZoom.value()
+    	slidePosition[currentSlide] = self.dockwidget.txtSlidePosition.text()
 
     def open_current_slide(self):
-    	global currentSlide
-    	QgsMessageLog.logMessage("Current slide count is: %s " % (len(slideTitle)), 'Story', QgsMessageLog.INFO)
+    	global currentSlide, slideTitle, slideContent, slideZoom, slidePosition
+    	#QgsMessageLog.logMessage("Count: %s Current Index: %s " % (len(slideTitle), currentSlide), 'Story', QgsMessageLog.INFO)
     	self.dockwidget.txtSlideTitle.setText(slideTitle[currentSlide])
     	self.dockwidget.txtSlideContent.setText(slideContent[currentSlide])
-    	#self.dockwidget.lblSlideNumber.setText(self.tr('Slide %s/%s') % (currentSlide, slideTitle.count()))
-    	QgsMessageLog.logMessage("Current slide title: %s " % (slideTitle[currentSlide]), 'Story', QgsMessageLog.INFO)
-    	QgsMessageLog.logMessage("Current slide content: %s " % (slideContent[currentSlide]), 'Story', QgsMessageLog.INFO)
+    	self.dockwidget.spinSlideZoom.setValue(int(slideZoom[currentSlide]))
+    	self.dockwidget.txtSlidePosition.setText(slidePosition[currentSlide])
+    	#QgsMessageLog.logMessage("Current slide title: %s " % (slideTitle[currentSlide]), 'Story', QgsMessageLog.INFO)
+    	#QgsMessageLog.logMessage("Current slide content: %s " % (slideContent[currentSlide]), 'Story', QgsMessageLog.INFO)
+    	self.dockwidget.lblSlideNumber.setText(self.tr('Slide %s/%s') % (currentSlide + 1, len(slideTitle)))
+    	
+    def get_current_map(self):
+    	centerCoordinate = str(self.iface.mapCanvas().extent().center().x()) + "," + str(self.iface.mapCanvas().extent().center().y())
+    	return centerCoordinate
     	
     
     #--------------------------------------------------------------------------
@@ -305,14 +317,20 @@ class story:
             global storyStyle
             global storyBaseMap
             global slideTitle
-            slideTitle = list()
+            slideTitle = list("")
             global slideContent
-            slideContent = list()
+            slideContent = list("")
             global slideZoom
-            slideZoom = list()
+            slideZoom = list("")
             global slidePosition
-            slidePosition = list()
+            slidePosition = list("")
             global storyFile
+            slideTitle.insert(currentSlide, self.tr("Slide Title"))
+            slideContent.insert(currentSlide, self.tr("Content"))
+            slideZoom.insert(currentSlide, 18)
+            slidePosition.insert(currentSlide, self.get_current_map())
+            self.open_current_slide()
+            #QgsMessageLog.logMessage("Count: %s Index: %s " % (len(slideTitle), currentSlide), 'Story', QgsMessageLog.INFO)
             
             """ Catchers for panel button clicks
             each catch must have corresponding def name():
