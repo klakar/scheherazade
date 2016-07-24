@@ -23,14 +23,14 @@
 from PyQt4.QtCore import QSettings, QTranslator, qVersion, QCoreApplication, Qt
 from PyQt4.QtGui import QAction, QIcon, QMessageBox
 # Initialize Qt resources from file resources.py
-import resources
+import resources, math
 
 # Import the code for the DockWidget
 from story_dockwidget import storyDockWidget
 import os.path
 
 # Import QGIS gui stuff
-from qgis.core import QgsMessageLog
+from qgis.core import QgsMessageLog, QgsPoint
 #from qgis.gui import QgsMapCanvas
 
 
@@ -244,21 +244,46 @@ class story:
     def slide_add(self):
     	#QMessageBox.information(self.iface.mainWindow(),self.tr(u"Message!"), self.tr(u"This is a test..."))
     	global currentSlide
-    	self.save_current_slide
+    	self.save_current_slide()
     	currentSlide += 1
     	slideTitle.insert(currentSlide, self.tr("Slide Title"))
     	slideContent.insert(currentSlide, self.tr("Content"))
-    	slideZoom.insert(currentSlide, 18)
-    	slidePosition.insert(currentSlide, self.get_current_slide())
+    	slideZoom.insert(currentSlide, self.get_current_zoom())
+    	slidePosition.insert(currentSlide, self.get_current_map())
     	self.open_current_slide()
     	#QgsMessageLog.logMessage("Current slide is: %s " % (currentSlide), 'Story', QgsMessageLog.INFO)
 
     def get_position_from_map(self):
-    	QMessageBox.information(self.iface.mainWindow(),self.tr(u"Message!"), self.tr(u"This is a test..."))
+    	#QMessageBox.information(self.iface.mainWindow(),self.tr(u"Message!"), self.tr(u"This is a test..."))
+    	self.dockwidget.txtSlidePosition.setText(self.get_current_map())
+    	self.dockwidget.spinSlideZoom.setValue(int(self.get_current_zoom()))
 
     def select_create_file(self):
     	QMessageBox.information(self.iface.mainWindow(),self.tr(u"Message!"), self.tr(u"This is a test..."))
     
+    def save_story(self):
+    	self.save_current_slide()
+    	global storyTitle, storyStyle, storyBaseMap, slideTitle, slideContent, slideZoom, slidePosition, storyFile
+    	storyTitle = self.dockwidget.txtStoryTitle.text()
+    	storyStyle = self.dockwidget.cmbStoryStyle.currentText()
+    	storyBaseMap = self.dockwidget.cmbBaseMap.currentText()
+    	storyFile = self.dockwidget.txtStoryFile.text()
+    	storyText = "<storyTitle>%s</storyTitle>\n" % (storyTitle)
+    	storyText += "<storyStyle>%s</storyStyle>\n" % (storyStyle)
+    	storyText += "<storyBaseMap>%s</storyBaseMap>\n" % (storyBaseMap)
+    	storyText += "<slides>\n"
+    	for x in range(0, len(slideTitle)):
+    		storyText += "<slide%s>\n" % (x)
+    		storyText += "<slideTitle>%s</slideTitle>\n" % (slideTitle[x])
+    		storyText += "<slideContent>%s</slideContent>\n" % (slideContent[x])
+    		storyText += "<slideZoom>%s</slideZoom>\n" % (slideZoom[x])
+    		storyText += "<slidePosition>%s</slidePosition>\n" % (slidePosition[x])
+    		storyText += "</slide%s>\n" % (x)
+    	storyText += "</slides>\n"
+    	storyText += "<storyFile>%s</storyFile>\n" % (storyFile)
+    	
+    	QMessageBox.information(self.iface.mainWindow(),self.tr(u"Message!"), storyText)
+    	
     def create_story(self):
     	global slideTitle
     	#QMessageBox.information(self.iface.mainWindow(),self.tr(u"Message!"), self.tr(u"Number of Slides: %s" % (len(slideTitle)))
@@ -267,7 +292,7 @@ class story:
     	global currentSlide, slideTitle, slideContent, slideZoom, slidePosition
     	#QgsMessageLog.logMessage("Count: %s Current Index: %s " % (len(slideTitle), currentSlide), 'Story', QgsMessageLog.INFO)
     	slideTitle[currentSlide] = self.dockwidget.txtSlideTitle.text()
-    	slideContent[currentSlide] = self.dockwidget.txtSlideContent.toPlainText()
+    	slideContent[currentSlide] = self.dockwidget.txtSlideContent.plainText()
     	slideZoom[currentSlide] = self.dockwidget.spinSlideZoom.value()
     	slidePosition[currentSlide] = self.dockwidget.txtSlidePosition.text()
 
@@ -275,17 +300,31 @@ class story:
     	global currentSlide, slideTitle, slideContent, slideZoom, slidePosition
     	#QgsMessageLog.logMessage("Count: %s Current Index: %s " % (len(slideTitle), currentSlide), 'Story', QgsMessageLog.INFO)
     	self.dockwidget.txtSlideTitle.setText(slideTitle[currentSlide])
-    	self.dockwidget.txtSlideContent.setText(slideContent[currentSlide])
+    	self.dockwidget.txtSlideContent.setPlainText(slideContent[currentSlide])
     	self.dockwidget.spinSlideZoom.setValue(int(slideZoom[currentSlide]))
     	self.dockwidget.txtSlidePosition.setText(slidePosition[currentSlide])
     	#QgsMessageLog.logMessage("Current slide title: %s " % (slideTitle[currentSlide]), 'Story', QgsMessageLog.INFO)
     	#QgsMessageLog.logMessage("Current slide content: %s " % (slideContent[currentSlide]), 'Story', QgsMessageLog.INFO)
     	self.dockwidget.lblSlideNumber.setText(self.tr('Slide %s/%s') % (currentSlide + 1, len(slideTitle)))
+    	self.pan_zoom_current()
     	
     def get_current_map(self):
     	centerCoordinate = str(self.iface.mapCanvas().extent().center().x()) + "," + str(self.iface.mapCanvas().extent().center().y())
     	return centerCoordinate
     	
+    def get_current_zoom(self):
+    	mapZoomLevel = int(math.log(591657550.500000 /self.iface.mapCanvas().scale(),2) + 1)
+    	return mapZoomLevel
+    	
+    def pan_zoom_current(self):
+    	global currentSlide, slideZoom, slidePosition
+    	#QgsMessageLog.logMessage("Current position: %s " % (slidePosition[currentSlide]), 'Story', QgsMessageLog.INFO)
+    	mapScale = 591657550.500000 / (math.pow(2,slideZoom[currentSlide] - 1))
+    	coord = slidePosition[currentSlide].split(",")
+    	mapCenter = QgsPoint(float(coord[0]),float(coord[1]))
+    	self.iface.mapCanvas().zoomScale(mapScale)
+    	self.iface.mapCanvas().setCenter(mapCenter)
+    	self.iface.mapCanvas().refresh()
     
     #--------------------------------------------------------------------------
     def run(self):
@@ -314,6 +353,7 @@ class story:
             global currentSlide
             currentSlide = 0
             global storyTitle
+            self.dockwidget.txtStoryTitle.setText(self.tr("The main Story Title"))
             global storyStyle
             global storyBaseMap
             global slideTitle
@@ -327,7 +367,7 @@ class story:
             global storyFile
             slideTitle.insert(currentSlide, self.tr("Slide Title"))
             slideContent.insert(currentSlide, self.tr("Content"))
-            slideZoom.insert(currentSlide, 18)
+            slideZoom.insert(currentSlide, self.get_current_zoom())
             slidePosition.insert(currentSlide, self.get_current_map())
             self.open_current_slide()
             #QgsMessageLog.logMessage("Count: %s Index: %s " % (len(slideTitle), currentSlide), 'Story', QgsMessageLog.INFO)
@@ -341,6 +381,7 @@ class story:
             self.dockwidget.btnAddSlide.clicked.connect(self.slide_add)
             self.dockwidget.btnGetSlidePositionFromMap.clicked.connect(self.get_position_from_map)
             self.dockwidget.btnFindFile.clicked.connect(self.select_create_file)
+            self.dockwidget.btnSaveStory.clicked.connect(self.save_story)
             self.dockwidget.btnCreateStory.clicked.connect(self.create_story)
             
             

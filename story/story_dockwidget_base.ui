@@ -10,6 +10,13 @@
     <height>1219</height>
    </rect>
   </property>
+  <property name="font">
+   <font>
+    <pointsize>12</pointsize>
+    <weight>75</weight>
+    <bold>true</bold>
+   </font>
+  </property>
   <property name="locale">
    <locale language="English" country="UnitedStates"/>
   </property>
@@ -17,7 +24,7 @@
    <set>Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea</set>
   </property>
   <property name="windowTitle">
-   <string>Story Teller</string>
+   <string>Story</string>
   </property>
   <widget class="QWidget" name="dockWidgetContents">
    <layout class="QGridLayout" name="gridLayout">
@@ -33,7 +40,7 @@
          </font>
         </property>
         <property name="text">
-         <string>Story Properties</string>
+         <string>&lt;b&gt;Main&lt;/b&gt;</string>
         </property>
        </widget>
       </item>
@@ -412,7 +419,7 @@
          </font>
         </property>
         <property name="text">
-         <string>File</string>
+         <string>&lt;b&gt;File&lt;/b&gt;</string>
         </property>
        </widget>
       </item>
@@ -537,6 +544,13 @@
          </spacer>
         </item>
         <item>
+         <widget class="QPushButton" name="btnSaveStory">
+          <property name="text">
+           <string>Save .story</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QPushButton" name="btnCreateStory">
           <property name="text">
            <string>Create/Publish</string>
@@ -572,7 +586,7 @@
          </font>
         </property>
         <property name="text">
-         <string>Slide</string>
+         <string>&lt;b&gt;Slides&lt;/b&gt;</string>
         </property>
        </widget>
       </item>
@@ -742,7 +756,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QTextEdit" name="txtSlideContent"/>
+         <widget class="QPlainTextEdit" name="txtSlideContent"/>
         </item>
        </layout>
       </item>
