@@ -262,15 +262,38 @@ class story:
     	self.dockwidget.spinSlideZoom.setValue(int(self.get_current_zoom()))
 
     def select_create_file(self):
-    	global storyFile
+    	global currentSlide, storyFile, storyTitle, slideTitle, slideContent, slideZoom, slidePosition
     	fileName = QFileDialog.getOpenFileName(None,self.tr(u"Open or create New story file"),os.path.expanduser('~'),"STORY files (*.story)")
     	if (os.path.isfile(fileName)):
-    		#e = ET.parse(fileName)
-    		#root = e.getroot()
-    		QMessageBox.information(self.iface.mainWindow(),self.tr(u"Message!"), "This is a file")
+    		e = ET.parse(fileName)
+    		root = e.getroot()
+    		storyTitle = root.find("storyTitle").text
+    		self.dockwidget.txtStoryTitle.setText(root.find("storyTitle").text)
+    		titleList = list()
+    		for st in root.iter("slideTitle"):
+    			titleList.append(st.text)
+    		slideTitle = titleList
+    		contentList = list()
+    		for sc in root.iter("slideContent"):
+    			contentList.append(sc.text)
+    		slideContent = contentList
+    		zoomList = list()
+    		for sz in root.iter("slideZoom"):
+    			zoomList.append(int(sz.text))
+    		slideZoom = zoomList
+    		positionList = list()
+    		for sp in root.iter("slidePosition"):
+    			positionList.append(sp.text)
+    		slidePosition = positionList
+    		currentSlide = 0
+    		self.open_current_slide()
+    		#QMessageBox.information(self.iface.mainWindow(),self.tr(u"Message!"), "This is a file")
     		
     	else:
-    		QMessageBox.information(self.iface.mainWindow(),self.tr(u"Message!"), self.tr(u"This is not a FILE"))
+    		#QMessageBox.information(self.iface.mainWindow(),self.tr(u"Message!"), self.tr(u"This is not a FILE"))
+    		if fileName != "":
+    			if not fileName.lower().endswith('.story'):
+    				fileName += ".story"
     	self.dockwidget.txtStoryFile.setText(fileName)
     	storyFile = fileName
     	
