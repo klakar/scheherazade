@@ -21,13 +21,16 @@
  ***************************************************************************/
 """
 from PyQt4.QtCore import QSettings, QTranslator, qVersion, QCoreApplication, Qt
-from PyQt4.QtGui import QAction, QIcon, QMessageBox
+from PyQt4.QtGui import QAction, QIcon, QMessageBox, QFileDialog
 # Initialize Qt resources from file resources.py
 import resources, math
 
 # Import the code for the DockWidget
 from story_dockwidget import storyDockWidget
 import os.path
+
+# Import xml stuff
+import xml.etree.ElementTree as ET
 
 # Import QGIS gui stuff
 from qgis.core import QgsMessageLog, QgsPoint, QgsCoordinateTransform, QgsCoordinateReferenceSystem
@@ -246,8 +249,8 @@ class story:
     	global currentSlide
     	self.save_current_slide()
     	currentSlide += 1
-    	slideTitle.insert(currentSlide, self.tr("Slide Title"))
-    	slideContent.insert(currentSlide, self.tr("Content"))
+    	slideTitle.insert(currentSlide, self.tr(u"Slide Title"))
+    	slideContent.insert(currentSlide, self.tr(u"Content"))
     	slideZoom.insert(currentSlide, self.get_current_zoom())
     	slidePosition.insert(currentSlide, self.get_current_map())
     	self.open_current_slide()
@@ -259,7 +262,18 @@ class story:
     	self.dockwidget.spinSlideZoom.setValue(int(self.get_current_zoom()))
 
     def select_create_file(self):
-    	QMessageBox.information(self.iface.mainWindow(),self.tr(u"Message!"), self.tr(u"This is a test..."))
+    	global storyFile
+    	fileName = QFileDialog.getOpenFileName(None,self.tr(u"Open or create New story file"),os.path.expanduser('~'),"STORY files (*.story)")
+    	if (os.path.isfile(fileName)):
+    		#e = ET.parse(fileName)
+    		#root = e.getroot()
+    		QMessageBox.information(self.iface.mainWindow(),self.tr(u"Message!"), "This is a file")
+    		
+    	else:
+    		QMessageBox.information(self.iface.mainWindow(),self.tr(u"Message!"), self.tr(u"This is not a FILE"))
+    	self.dockwidget.txtStoryFile.setText(fileName)
+    	storyFile = fileName
+    	
     
     def save_story(self):
     	self.save_current_slide()
@@ -268,20 +282,23 @@ class story:
     	storyStyle = self.dockwidget.cmbStoryStyle.currentText()
     	storyBaseMap = self.dockwidget.cmbBaseMap.currentText()
     	storyFile = self.dockwidget.txtStoryFile.text()
-    	storyText = "<storyTitle>%s</storyTitle>\n" % (storyTitle)
-    	storyText += "<storyStyle>%s</storyStyle>\n" % (storyStyle)
-    	storyText += "<storyBaseMap>%s</storyBaseMap>\n" % (storyBaseMap)
-    	storyText += "<slides>\n"
+    	storyText = u"<?xml version=\"1.0\"?>\n"
+    	storyText += u"<story>\n<storyTitle>%s</storyTitle>\n" % (storyTitle)
+    	storyText += u"<storyStyle>%s</storyStyle>\n" % (storyStyle)
+    	storyText += u"<storyBaseMap>%s</storyBaseMap>\n" % (storyBaseMap)
+    	storyText += u"<slides>\n"
     	for x in range(0, len(slideTitle)):
-    		storyText += "<slide%s>\n" % (x)
-    		storyText += "<slideTitle>%s</slideTitle>\n" % (slideTitle[x])
-    		storyText += "<slideContent>%s</slideContent>\n" % (slideContent[x])
-    		storyText += "<slideZoom>%s</slideZoom>\n" % (slideZoom[x])
-    		storyText += "<slidePosition>%s</slidePosition>\n" % (slidePosition[x])
-    		storyText += "</slide%s>\n" % (x)
-    	storyText += "</slides>\n"
-    	storyText += "<storyFile>%s</storyFile>\n" % (storyFile)
-    	
+    		storyText += u"<slide id=\"%s\">\n" % (x)
+    		storyText += u"<slideTitle>%s</slideTitle>\n" % (slideTitle[x])
+    		storyText += u"<slideContent>%s</slideContent>\n" % (slideContent[x])
+    		storyText += u"<slideZoom>%s</slideZoom>\n" % (slideZoom[x])
+    		storyText += u"<slidePosition>%s</slidePosition>\n" % (slidePosition[x])
+    		storyText += u"</slide>\n"
+    	storyText += u"</slides>\n"
+    	storyText += u"<storyFile>%s</storyFile>\n</story>" % (storyFile)
+    	f = open(storyFile,'w')
+    	f.write(storyText.encode('utf-8'))
+    	f.close()
     	QMessageBox.information(self.iface.mainWindow(),self.tr(u"Message!"), storyText)
     	
     def create_story(self):
