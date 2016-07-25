@@ -30,7 +30,7 @@ from story_dockwidget import storyDockWidget
 import os.path
 
 # Import QGIS gui stuff
-from qgis.core import QgsMessageLog, QgsPoint
+from qgis.core import QgsMessageLog, QgsPoint, QgsCoordinateTransform, QgsCoordinateReferenceSystem
 #from qgis.gui import QgsMapCanvas
 
 
@@ -309,7 +309,12 @@ class story:
     	self.pan_zoom_current()
     	
     def get_current_map(self):
-    	centerCoordinate = str(self.iface.mapCanvas().extent().center().x()) + "," + str(self.iface.mapCanvas().extent().center().y())
+    	curX = self.iface.mapCanvas().extent().center().x()
+    	curY = self.iface.mapCanvas().extent().center().y()
+    	EPSG = self.iface.mapCanvas().mapRenderer().destinationCrs().authid().split(":")[1]
+    	transf = QgsCoordinateTransform( QgsCoordinateReferenceSystem(int(EPSG)), QgsCoordinateReferenceSystem(4326) )
+    	centerPoint = transf.transform(QgsPoint(curX, curY))
+    	centerCoordinate = str(centerPoint.x()) + "," + str(centerPoint.y())
     	return centerCoordinate
     	
     def get_current_zoom(self):
@@ -321,10 +326,15 @@ class story:
     	#QgsMessageLog.logMessage("Current position: %s " % (slidePosition[currentSlide]), 'Story', QgsMessageLog.INFO)
     	mapScale = 591657550.500000 / (math.pow(2,slideZoom[currentSlide] - 1))
     	coord = slidePosition[currentSlide].split(",")
-    	mapCenter = QgsPoint(float(coord[0]),float(coord[1]))
+    	latlonPoint = QgsPoint(float(coord[0]),float(coord[1]))
+    	EPSG = self.iface.mapCanvas().mapRenderer().destinationCrs().authid().split(":")[1]
+    	transf = QgsCoordinateTransform( QgsCoordinateReferenceSystem(4326), QgsCoordinateReferenceSystem(int(EPSG)) )
+    	mapCenter = transf.transform(latlonPoint)
     	self.iface.mapCanvas().zoomScale(mapScale)
     	self.iface.mapCanvas().setCenter(mapCenter)
     	self.iface.mapCanvas().refresh()
+    	
+    	
     
     #--------------------------------------------------------------------------
     def run(self):
