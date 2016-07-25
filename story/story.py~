@@ -36,6 +36,9 @@ import xml.etree.ElementTree as ET
 from qgis.core import QgsMessageLog, QgsPoint, QgsCoordinateTransform, QgsCoordinateReferenceSystem
 #from qgis.gui import QgsMapCanvas
 
+# Import other stuff
+import shutil, webbrowser
+
 
 
 class story:
@@ -290,9 +293,10 @@ class story:
     		#QMessageBox.information(self.iface.mainWindow(),self.tr(u"Message!"), "This is a file")
     		
     	else:
-    		QMessageBox.information(self.iface.mainWindow(),self.tr(u"Message!"), self.tr(u"This is not a FILE"))
-    		if not fileName.lower().endswith('.story'):
-    			fileName += ".story"
+    		#QMessageBox.information(self.iface.mainWindow(),self.tr(u"Message!"), self.tr(u"This is not a FILE"))
+    		if fileName != "":
+    			if not fileName.lower().endswith('.story'):
+    				fileName += ".story"
     	self.dockwidget.txtStoryFile.setText(fileName)
     	storyFile = fileName
     	
@@ -321,10 +325,40 @@ class story:
     	f = open(storyFile,'w')
     	f.write(storyText.encode('utf-8'))
     	f.close()
-    	QMessageBox.information(self.iface.mainWindow(),self.tr(u"Message!"), storyText)
+    	#QMessageBox.information(self.iface.mainWindow(),self.tr(u"Message!"), storyText)
     	
     def create_story(self):
-    	global slideTitle
+    	self.save_current_slide()
+    	global storyTitle, slideTitle, slideContent, slideZoom, slidePosition
+    	storyTitle = self.dockwidget.txtStoryTitle.text()
+    	sf = open( os.path.join(os.path.dirname(os.path.realpath(__file__)),"storysource/index.html"), 'r')
+    	storyHtml = sf.read()
+    	storyHtml = storyHtml.replace("{{storyTitle}}", storyTitle)
+    	slideDivs = ""
+    	slideList = ""
+    	zoomList = ""
+    	positionList = ""
+    	for x in range(0, len(slideTitle)):
+    		slideDivs += "<div id=\"id%s\" class=\"slide\"><h1>%s</h1><p>%s</p></div>\n" % (x, slideTitle[x], slideContent[x])
+    		slideList += "\"id%s\"," % (x)
+    		zoomList += "%s," % (slideZoom[x])
+    		positionList += "[%s]," % (slidePosition[x])
+    	storyHtml = storyHtml.replace("{{startPosition}}", "[%s]" % (slidePosition[0]))
+    	storyHtml = storyHtml.replace("{{startZoom}}", str(slideZoom[0]))
+    	storyHtml = storyHtml.replace("{{slideDivs}}", slideDivs)
+    	storyHtml = storyHtml.replace("{{slideList}}", slideList[:-1])
+    	storyHtml = storyHtml.replace("{{zoomList}}", zoomList[:-1])
+    	storyHtml = storyHtml.replace("{{positionList}}", positionList[:-1])
+    	
+    	#QMessageBox.information(self.iface.mainWindow(),self.tr(u"Message!"), sourceHtml)
+    	storyFolder = QFileDialog.getExistingDirectory(None,self.tr(u"Select folder to generate story"),os.path.expanduser('~'))
+    	f = open( os.path.join(storyFolder, "index.htm"), 'w' )
+    	f.write(storyHtml.encode('utf-8'))
+    	f.close()
+    	styleSource = os.path.join(os.path.dirname(os.path.realpath(__file__)),"style/storymap.css")
+    	styleDestination = os.path.join(storyFolder, "story.css")
+    	shutil.copy(styleSource, styleDestination)
+    	webbrowser.open(os.path.join(storyFolder, "index.htm")[, new=0[, autoraise=True]])
     	#QMessageBox.information(self.iface.mainWindow(),self.tr(u"Message!"), self.tr(u"Number of Slides: %s" % (len(slideTitle)))
     	
     def save_current_slide(self):
