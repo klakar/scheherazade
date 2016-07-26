@@ -1,5 +1,17 @@
 <RCC>
     <qresource prefix="/plugins/story" >
         <file>icon.png</file>
+        <file>icons/arrows-3.png</file>
+        <file>icons/interface-3.png</file>
+        <file>icons/arrows-2.png</file>
+        <file>icons/arrows-1.png</file>
+        <file>icons/save.png</file>
+        <file>icons/reading.png</file>
+        <file>icons/location-pin.png</file>
+        <file>icons/interface-2.png</file>
+        <file>icons/interface-1.png</file>
+        <file>icons/interface.png</file>
+        <file>icons/arrows.png</file>
+        <file>icons/bad-cross-educational-sign.png</file>
     </qresource>
 </RCC>

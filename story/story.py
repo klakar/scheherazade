@@ -38,6 +38,7 @@ from qgis.core import QgsMessageLog, QgsPoint, QgsCoordinateTransform, QgsCoordi
 
 # Import other stuff
 import shutil, webbrowser
+from os import listdir
 
 
 
@@ -225,7 +226,7 @@ class story:
     """Definitions for Panel Actions
        Should have a corresponding self.dockwidget.object.event.connect(self.name) in run(self):
     """
-
+    # Move to Next Slide
     def navigateNext(self):
     	global currentSlide, slideTitle
     	self.save_current_slide()
@@ -233,7 +234,8 @@ class story:
     		currentSlide += 1
     	self.open_current_slide()
     	#QgsMessageLog.logMessage("Current slide is: %s " % (currentSlide), 'Story', QgsMessageLog.INFO)
- 
+    
+    # Move to Previous Slide
     def navigatePrevious(self):
     	global currentSlide
     	self.save_current_slide()
@@ -242,11 +244,48 @@ class story:
     	self.open_current_slide()
     	#QgsMessageLog.logMessage("Current slide is: %s " % (currentSlide), 'Story', QgsMessageLog.INFO)
     
+    # Move slide sooner - one step
+    def move_sooner(self):
+    	#QMessageBox.information(self.iface.mainWindow(),self.tr(u"Message!"), u"Not yet implemented!")
+    	if (currentSlide > 0):
+    		self.save_current_slide()
+    		global currentSlide, slideTitle, slideContent, slideZoom, slidePosition
+    		slideTitle[currentSlide-1],slideTitle[currentSlide] = slideTitle[currentSlide],slideTitle[currentSlide-1]
+    		slideContent[currentSlide-1],slideContent[currentSlide] = slideContent[currentSlide],slideContent[currentSlide-1]
+    		slideZoom[currentSlide-1],slideZoom[currentSlide] = slideZoom[currentSlide],slideZoom[currentSlide-1]
+    		slidePosition[currentSlide-1],slidePosition[currentSlide] = slidePosition[currentSlide],slidePosition[currentSlide-1]
+    		currentSlide -= 1
+    		self.open_current_slide()
+    	
+    # Move slide later - one step
+    def move_later(self):
+    	#QMessageBox.information(self.iface.mainWindow(),self.tr(u"Message!"), u"Not yet implemented!")
+    	global currentSlide, slideTitle, slideContent, slideZoom, slidePosition
+    	if (currentSlide < (len(slideTitle)-1)):
+    		self.save_current_slide()
+    		slideTitle[currentSlide+1],slideTitle[currentSlide] = slideTitle[currentSlide],slideTitle[currentSlide+1]
+    		slideContent[currentSlide+1],slideContent[currentSlide] = slideContent[currentSlide],slideContent[currentSlide+1]
+    		slideZoom[currentSlide+1],slideZoom[currentSlide] = slideZoom[currentSlide],slideZoom[currentSlide+1]
+    		slidePosition[currentSlide+1],slidePosition[currentSlide] = slidePosition[currentSlide],slidePosition[currentSlide+1]
+    		currentSlide += 1
+    		self.open_current_slide()
+    
+    
+    # Remove current Slide
     def slide_remove(self):
     	#QMessageBox.information(self.iface.mainWindow(),self.tr(u"Message!"), u"Current Slide: %s" % (currentSlide))
-    	self.dockwidget.txtSlideContent.setPlainText('test')
+    	reply = QMessageBox.question(self.iface.mainWindow(), self.tr(u'Continue?'), self.tr('Remove Current Slide?'), QMessageBox.Yes, QMessageBox.No)
+    	if reply == QMessageBox.Yes:
+    		global currentSlide, slideTitle, slideContent, slideZoom, slidePosition
+    		del slideTitle[currentSlide]
+    		del slideContent[currentSlide]
+    		del slideZoom[currentSlide]
+    		del slidePosition[currentSlide]
+    		if (currentSlide == len(slideTitle)):
+    			currentSlide -= 1
+    		self.open_current_slide()
 
-
+    # Add Slide after current
     def slide_add(self):
     	#QMessageBox.information(self.iface.mainWindow(),self.tr(u"Message!"), self.tr(u"This is a test..."))
     	global currentSlide
@@ -259,11 +298,13 @@ class story:
     	self.open_current_slide()
     	#QgsMessageLog.logMessage("Current slide is: %s " % (currentSlide), 'Story', QgsMessageLog.INFO)
 
+    # Get position and zoom from map canvas center
     def get_position_from_map(self):
     	#QMessageBox.information(self.iface.mainWindow(),self.tr(u"Message!"), self.tr(u"This is a test..."))
     	self.dockwidget.txtSlidePosition.setText(self.get_current_map())
     	self.dockwidget.spinSlideZoom.setValue(int(self.get_current_zoom()))
 
+    # Open story-file
     def select_create_file(self):
     	global currentSlide, storyFile, storyTitle, slideTitle, slideContent, slideZoom, slidePosition
     	fileName = QFileDialog.getOpenFileName(None,self.tr(u"Open or create New story file"),os.path.expanduser('~'),"STORY files (*.story)")
@@ -293,74 +334,82 @@ class story:
     		#QMessageBox.information(self.iface.mainWindow(),self.tr(u"Message!"), "This is a file")
     		
     	else:
-    		#QMessageBox.information(self.iface.mainWindow(),self.tr(u"Message!"), self.tr(u"This is not a FILE"))
-    		if fileName != "":
-    			if not fileName.lower().endswith('.story'):
-    				fileName += ".story"
+    		QMessageBox.information(self.iface.mainWindow(),self.tr(u"Message!"), self.tr(u"This file does not exist!"))
+    		
     	self.dockwidget.txtStoryFile.setText(fileName)
     	storyFile = fileName
     	
-    
+    # Save story-file
     def save_story(self):
     	self.save_current_slide()
     	global storyTitle, storyStyle, storyBaseMap, slideTitle, slideContent, slideZoom, slidePosition, storyFile
-    	storyTitle = self.dockwidget.txtStoryTitle.text()
-    	storyStyle = self.dockwidget.cmbStoryStyle.currentText()
-    	storyBaseMap = self.dockwidget.cmbBaseMap.currentText()
-    	storyFile = self.dockwidget.txtStoryFile.text()
-    	storyText = u"<?xml version=\"1.0\"?>\n"
-    	storyText += u"<story>\n<storyTitle>%s</storyTitle>\n" % (storyTitle)
-    	storyText += u"<storyStyle>%s</storyStyle>\n" % (storyStyle)
-    	storyText += u"<storyBaseMap>%s</storyBaseMap>\n" % (storyBaseMap)
-    	storyText += u"<slides>\n"
-    	for x in range(0, len(slideTitle)):
-    		storyText += u"<slide id=\"%s\">\n" % (x)
-    		storyText += u"<slideTitle>%s</slideTitle>\n" % (slideTitle[x])
-    		storyText += u"<slideContent>%s</slideContent>\n" % (slideContent[x])
-    		storyText += u"<slideZoom>%s</slideZoom>\n" % (slideZoom[x])
-    		storyText += u"<slidePosition>%s</slidePosition>\n" % (slidePosition[x])
-    		storyText += u"</slide>\n"
-    	storyText += u"</slides>\n"
-    	storyText += u"<storyFile>%s</storyFile>\n</story>" % (storyFile)
-    	f = open(storyFile,'w')
-    	f.write(storyText.encode('utf-8'))
-    	f.close()
-    	#QMessageBox.information(self.iface.mainWindow(),self.tr(u"Message!"), storyText)
+    	if (storyFile == ""):
+    		fileName = QFileDialog.getOpenFileName(None,self.tr(u"Save New or Replace Current StoryFile"),os.path.expanduser('~'),"STORY files (*.story)")
+    		if fileName != "":
+    			if not fileName.lower().endswith('.story'):
+    				fileName += ".story"
+    			self.dockwidget.txtStoryFile.setText(fileName)
+    			storyFile = fileName
+    	else:
+    		storyTitle = self.dockwidget.txtStoryTitle.text()
+    		storyStyle = self.dockwidget.cmbStoryStyle.currentText()
+    		storyTemplate = self.dockwidget.cmbStoryTemplate.currentText()
+    		storyFile = self.dockwidget.txtStoryFile.text()
+    		storyText = u"<?xml version=\"1.0\"?>\n"
+    		storyText += u"<story>\n<storyTitle>%s</storyTitle>\n" % (storyTitle)
+    		storyText += u"<storyStyle>%s</storyStyle>\n" % (storyStyle)
+    		storyText += u"<storyTemplate>%s</storyTemplate>\n" % (storyTemplate)
+    		storyText += u"<slides>\n"
+    		for x in range(0, len(slideTitle)):
+    			storyText += u"<slide id=\"%s\">\n" % (x)
+    			storyText += u"<slideTitle>%s</slideTitle>\n" % (slideTitle[x])
+    			storyText += u"<slideContent>%s</slideContent>\n" % (slideContent[x])
+    			storyText += u"<slideZoom>%s</slideZoom>\n" % (slideZoom[x])
+    			storyText += u"<slidePosition>%s</slidePosition>\n" % (slidePosition[x])
+    			storyText += u"</slide>\n"
+    		storyText += u"</slides>\n"
+    		storyText += u"<storyFile>%s</storyFile>\n</story>" % (storyFile)
+    		f = open(storyFile,'w')
+    		f.write(storyText.encode('utf-8'))
+    		f.close()
     	
+    # Render story to HTML/JS
     def create_story(self):
     	self.save_current_slide()
     	global storyTitle, slideTitle, slideContent, slideZoom, slidePosition
-    	storyTitle = self.dockwidget.txtStoryTitle.text()
-    	sf = open( os.path.join(os.path.dirname(os.path.realpath(__file__)),"storysource/index.html"), 'r')
-    	storyHtml = sf.read()
-    	storyHtml = storyHtml.replace("{{storyTitle}}", storyTitle)
-    	slideDivs = ""
-    	slideList = ""
-    	zoomList = ""
-    	positionList = ""
-    	for x in range(0, len(slideTitle)):
-    		slideDivs += "<div id=\"id%s\" class=\"slide\"><h1>%s</h1><p>%s</p></div>\n" % (x, slideTitle[x], slideContent[x])
-    		slideList += "\"id%s\"," % (x)
-    		zoomList += "%s," % (slideZoom[x])
-    		positionList += "[%s]," % (slidePosition[x])
-    	storyHtml = storyHtml.replace("{{startPosition}}", "[%s]" % (slidePosition[0]))
-    	storyHtml = storyHtml.replace("{{startZoom}}", str(slideZoom[0]))
-    	storyHtml = storyHtml.replace("{{slideDivs}}", slideDivs)
-    	storyHtml = storyHtml.replace("{{slideList}}", slideList[:-1])
-    	storyHtml = storyHtml.replace("{{zoomList}}", zoomList[:-1])
-    	storyHtml = storyHtml.replace("{{positionList}}", positionList[:-1])
-    	
-    	#QMessageBox.information(self.iface.mainWindow(),self.tr(u"Message!"), sourceHtml)
     	storyFolder = QFileDialog.getExistingDirectory(None,self.tr(u"Select folder to generate story"),os.path.expanduser('~'))
-    	f = open( os.path.join(storyFolder, "index.htm"), 'w' )
-    	f.write(storyHtml.encode('utf-8'))
-    	f.close()
-    	styleSource = os.path.join(os.path.dirname(os.path.realpath(__file__)),"style/storymap.css")
-    	styleDestination = os.path.join(storyFolder, "story.css")
-    	shutil.copy(styleSource, styleDestination)
-    	webbrowser.open(os.path.join(storyFolder, "index.htm"))
-    	#QMessageBox.information(self.iface.mainWindow(),self.tr(u"Message!"), self.tr(u"Number of Slides: %s" % (len(slideTitle)))
+    	if (storyFolder != ""):
+    		storyTitle = self.dockwidget.txtStoryTitle.text()
+    		sf = open( os.path.join(os.path.dirname(os.path.realpath(__file__)),"storysource/%s" % (self.dockwidget.cmbStoryTemplate.currentText())), 'r')
+    		storyHtml = sf.read()
+    		storyHtml = storyHtml.replace("{{storyTitle}}", storyTitle)
+    		slideDivs = ""
+    		slideList = ""
+    		zoomList = ""
+    		positionList = ""
+    		for x in range(0, len(slideTitle)):
+    			slideDivs += "<div id=\"id%s\" class=\"slide\"><h1>%s</h1><p>%s</p></div>\n" % (x, slideTitle[x], slideContent[x])
+    			slideList += "\"id%s\"," % (x)
+    			zoomList += "%s," % (slideZoom[x])
+    			positionList += "[%s]," % (slidePosition[x])
+    		storyHtml = storyHtml.replace("{{startPosition}}", "[%s]" % (slidePosition[0]))
+    		storyHtml = storyHtml.replace("{{startZoom}}", str(slideZoom[0]))
+    		storyHtml = storyHtml.replace("{{slideDivs}}", slideDivs)
+    		storyHtml = storyHtml.replace("{{slideList}}", slideList[:-1])
+    		storyHtml = storyHtml.replace("{{zoomList}}", zoomList[:-1])
+    		storyHtml = storyHtml.replace("{{positionList}}", positionList[:-1])
     	
+    		#QMessageBox.information(self.iface.mainWindow(),self.tr(u"Message!"), sourceHtml)
+    		f = open( os.path.join(storyFolder, "index.htm"), 'w' )
+    		f.write(storyHtml.encode('utf-8'))
+    		f.close()
+    		styleSource = os.path.join(os.path.dirname(os.path.realpath(__file__)),"storysource/%s" % (self.dockwidget.cmbStoryStyle.currentText()))
+    		styleDestination = os.path.join(storyFolder, "story.css")
+    		shutil.copy(styleSource, styleDestination)
+    		webbrowser.open(os.path.join(storyFolder, "index.htm"))
+    		#QMessageBox.information(self.iface.mainWindow(),self.tr(u"Message!"), self.tr(u"Number of Slides: %s" % (len(slideTitle)))
+    	
+    # Store current slide form to variable
     def save_current_slide(self):
     	global currentSlide, slideTitle, slideContent, slideZoom, slidePosition
     	#QgsMessageLog.logMessage("Count: %s Current Index: %s " % (len(slideTitle), currentSlide), 'Story', QgsMessageLog.INFO)
@@ -368,7 +417,8 @@ class story:
     	slideContent[currentSlide] = self.dockwidget.txtSlideContent.toPlainText()
     	slideZoom[currentSlide] = self.dockwidget.spinSlideZoom.value()
     	slidePosition[currentSlide] = self.dockwidget.txtSlidePosition.text()
-
+    	
+    # Open current slide variables in slide form
     def open_current_slide(self):
     	global currentSlide, slideTitle, slideContent, slideZoom, slidePosition
     	#QgsMessageLog.logMessage("Count: %s Current Index: %s " % (len(slideTitle), currentSlide), 'Story', QgsMessageLog.INFO)
@@ -381,6 +431,7 @@ class story:
     	self.dockwidget.lblSlideNumber.setText(self.tr('Slide %s/%s') % (currentSlide + 1, len(slideTitle)))
     	self.pan_zoom_current()
     	
+    # Function to get and transform canvas center to Lon/Lat - return QgsPoint
     def get_current_map(self):
     	curX = self.iface.mapCanvas().extent().center().x()
     	curY = self.iface.mapCanvas().extent().center().y()
@@ -390,14 +441,16 @@ class story:
     	centerCoordinate = str(centerPoint.x()) + "," + str(centerPoint.y())
     	return centerCoordinate
     	
+    # Get canvas scale and transform to zoom approximation
     def get_current_zoom(self):
-    	mapZoomLevel = int(math.log(591657550.500000 /self.iface.mapCanvas().scale(),2) + 1)
+    	mapZoomLevel = int(math.log(591657550.500000 /self.iface.mapCanvas().scale(),2))
     	return mapZoomLevel
     	
+    # Pan and zoom canvas to current slide settings
     def pan_zoom_current(self):
     	global currentSlide, slideZoom, slidePosition
     	#QgsMessageLog.logMessage("Current position: %s " % (slidePosition[currentSlide]), 'Story', QgsMessageLog.INFO)
-    	mapScale = 591657550.500000 / (math.pow(2,slideZoom[currentSlide] - 1))
+    	mapScale = 591657550.500000 / (math.pow(2,slideZoom[currentSlide]))
     	coord = slidePosition[currentSlide].split(",")
     	latlonPoint = QgsPoint(float(coord[0]),float(coord[1]))
     	EPSG = self.iface.mapCanvas().mapRenderer().destinationCrs().authid().split(":")[1]
@@ -407,7 +460,25 @@ class story:
     	self.iface.mapCanvas().setCenter(mapCenter)
     	self.iface.mapCanvas().refresh()
     	
+    # Clear field and variable for storyFile
+    def clear_story_file(self):
+    	global storyFile
+    	storyFile = ""
+    	self.dockwidget.txtStoryFile.setText("")
     	
+    # Populate Templates and Styles with htm and css files from storysource folder
+    def read_templates_and_styles(self):
+    	global storyTemplate, storyStyle
+    	sourcefiles = [f for f in listdir(os.path.join(os.path.dirname(os.path.realpath(__file__)),"storysource")) if os.path.isfile(os.path.join(os.path.join(os.path.dirname(os.path.realpath(__file__)),"storysource"), f))]
+    	for sourcefile in sourcefiles:
+    		if sourcefile.lower().endswith('.htm'):
+    			# TODO add thing to templates
+    			QgsMessageLog.logMessage(sourcefile, 'Story', QgsMessageLog.INFO)
+    			self.dockwidget.cmbStoryTemplate.addItem(sourcefile)
+    		if sourcefile.lower().endswith('.css'):
+    			# TODO add thing to style
+    			QgsMessageLog.logMessage(sourcefile, 'Story', QgsMessageLog.INFO)
+    			self.dockwidget.cmbStoryStyle.addItem(sourcefile)
     
     #--------------------------------------------------------------------------
     def run(self):
@@ -438,7 +509,7 @@ class story:
             global storyTitle
             self.dockwidget.txtStoryTitle.setText(self.tr("The main Story Title"))
             global storyStyle
-            global storyBaseMap
+            global storyTemplate
             global slideTitle
             slideTitle = list("")
             global slideContent
@@ -448,12 +519,15 @@ class story:
             global slidePosition
             slidePosition = list("")
             global storyFile
+            storyFile = ""
             slideTitle.insert(currentSlide, self.tr("Slide Title"))
             slideContent.insert(currentSlide, self.tr("Content"))
             slideZoom.insert(currentSlide, self.get_current_zoom())
             slidePosition.insert(currentSlide, self.get_current_map())
             self.open_current_slide()
             #QgsMessageLog.logMessage("Count: %s Index: %s " % (len(slideTitle), currentSlide), 'Story', QgsMessageLog.INFO)
+            
+            self.read_templates_and_styles()
             
             """ Catchers for panel button clicks
             each catch must have corresponding def name():
@@ -466,6 +540,9 @@ class story:
             self.dockwidget.btnFindFile.clicked.connect(self.select_create_file)
             self.dockwidget.btnSaveStory.clicked.connect(self.save_story)
             self.dockwidget.btnCreateStory.clicked.connect(self.create_story)
+            self.dockwidget.btnMoveLater.clicked.connect(self.move_later)
+            self.dockwidget.btnMoveSooner.clicked.connect(self.move_sooner)
+            self.dockwidget.btnClearFile.clicked.connect(self.clear_story_file)
             
             
 

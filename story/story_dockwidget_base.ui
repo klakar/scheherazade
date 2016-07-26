@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>531</width>
+    <width>514</width>
     <height>1219</height>
    </rect>
   </property>
@@ -70,7 +70,7 @@
          <widget class="QLineEdit" name="txtStoryTitle">
           <property name="minimumSize">
            <size>
-            <width>300</width>
+            <width>400</width>
             <height>0</height>
            </size>
           </property>
@@ -164,6 +164,104 @@
              </colorrole>
             </disabled>
            </palette>
+          </property>
+          <property name="toolTip">
+           <string>Main Story Title</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <widget class="QLabel" name="lblStoryBaseMap">
+          <property name="text">
+           <string>Template</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer_7">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QComboBox" name="cmbStoryTemplate">
+          <property name="palette">
+           <palette>
+            <active>
+             <colorrole role="Base">
+              <brush brushstyle="SolidPattern">
+               <color alpha="255">
+                <red>255</red>
+                <green>255</green>
+                <blue>255</blue>
+               </color>
+              </brush>
+             </colorrole>
+             <colorrole role="Window">
+              <brush brushstyle="SolidPattern">
+               <color alpha="255">
+                <red>255</red>
+                <green>255</green>
+                <blue>255</blue>
+               </color>
+              </brush>
+             </colorrole>
+            </active>
+            <inactive>
+             <colorrole role="Base">
+              <brush brushstyle="SolidPattern">
+               <color alpha="255">
+                <red>255</red>
+                <green>255</green>
+                <blue>255</blue>
+               </color>
+              </brush>
+             </colorrole>
+             <colorrole role="Window">
+              <brush brushstyle="SolidPattern">
+               <color alpha="255">
+                <red>255</red>
+                <green>255</green>
+                <blue>255</blue>
+               </color>
+              </brush>
+             </colorrole>
+            </inactive>
+            <disabled>
+             <colorrole role="Base">
+              <brush brushstyle="SolidPattern">
+               <color alpha="255">
+                <red>255</red>
+                <green>255</green>
+                <blue>255</blue>
+               </color>
+              </brush>
+             </colorrole>
+             <colorrole role="Window">
+              <brush brushstyle="SolidPattern">
+               <color alpha="255">
+                <red>255</red>
+                <green>255</green>
+                <blue>255</blue>
+               </color>
+              </brush>
+             </colorrole>
+            </disabled>
+           </palette>
+          </property>
+          <property name="toolTip">
+           <string>Select Story Template</string>
           </property>
          </widget>
         </item>
@@ -284,123 +382,9 @@
             </disabled>
            </palette>
           </property>
-          <item>
-           <property name="text">
-            <string>Style 1</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Style 2</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Style 3</string>
-           </property>
-          </item>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_2">
-        <item>
-         <widget class="QLabel" name="lblStoryBaseMap">
-          <property name="text">
-           <string>Base Map</string>
+          <property name="toolTip">
+           <string>Select Story Style</string>
           </property>
-         </widget>
-        </item>
-        <item>
-         <spacer name="horizontalSpacer_7">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item>
-         <widget class="QComboBox" name="cmbBaseMap">
-          <property name="palette">
-           <palette>
-            <active>
-             <colorrole role="Base">
-              <brush brushstyle="SolidPattern">
-               <color alpha="255">
-                <red>255</red>
-                <green>255</green>
-                <blue>255</blue>
-               </color>
-              </brush>
-             </colorrole>
-             <colorrole role="Window">
-              <brush brushstyle="SolidPattern">
-               <color alpha="255">
-                <red>255</red>
-                <green>255</green>
-                <blue>255</blue>
-               </color>
-              </brush>
-             </colorrole>
-            </active>
-            <inactive>
-             <colorrole role="Base">
-              <brush brushstyle="SolidPattern">
-               <color alpha="255">
-                <red>255</red>
-                <green>255</green>
-                <blue>255</blue>
-               </color>
-              </brush>
-             </colorrole>
-             <colorrole role="Window">
-              <brush brushstyle="SolidPattern">
-               <color alpha="255">
-                <red>255</red>
-                <green>255</green>
-                <blue>255</blue>
-               </color>
-              </brush>
-             </colorrole>
-            </inactive>
-            <disabled>
-             <colorrole role="Base">
-              <brush brushstyle="SolidPattern">
-               <color alpha="255">
-                <red>255</red>
-                <green>255</green>
-                <blue>255</blue>
-               </color>
-              </brush>
-             </colorrole>
-             <colorrole role="Window">
-              <brush brushstyle="SolidPattern">
-               <color alpha="255">
-                <red>255</red>
-                <green>255</green>
-                <blue>255</blue>
-               </color>
-              </brush>
-             </colorrole>
-            </disabled>
-           </palette>
-          </property>
-          <item>
-           <property name="text">
-            <string>Dummy Map 1</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Dummy Map 2</string>
-           </property>
-          </item>
          </widget>
         </item>
        </layout>
@@ -449,7 +433,7 @@
          <widget class="QLineEdit" name="txtStoryFile">
           <property name="minimumSize">
            <size>
-            <width>250</width>
+            <width>350</width>
             <height>0</height>
            </size>
           </property>
@@ -517,12 +501,23 @@
             </disabled>
            </palette>
           </property>
+          <property name="toolTip">
+           <string>Current Story Save File</string>
+          </property>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="btnFindFile">
+         <widget class="QPushButton" name="btnClearFile">
+          <property name="toolTip">
+           <string>Clear Story Save Path</string>
+          </property>
           <property name="text">
-           <string>...</string>
+           <string extracomment="Open Story"/>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normalon>:/plugins/story/icons/bad-cross-educational-sign.png</normalon>
+           </iconset>
           </property>
          </widget>
         </item>
@@ -544,16 +539,47 @@
          </spacer>
         </item>
         <item>
-         <widget class="QPushButton" name="btnSaveStory">
+         <widget class="QPushButton" name="btnFindFile">
+          <property name="toolTip">
+           <string>Open Story</string>
+          </property>
           <property name="text">
-           <string>Save .story</string>
+           <string extracomment="Open Story"/>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normalon>:/plugins/story/icons/interface-1.png</normalon>
+           </iconset>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btnSaveStory">
+          <property name="toolTip">
+           <string>Save Story</string>
+          </property>
+          <property name="text">
+           <string extracomment="Save .Story"/>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normalon>:/plugins/story/icons/save.png</normalon>
+           </iconset>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QPushButton" name="btnCreateStory">
+          <property name="toolTip">
+           <string>Create/Publish Story</string>
+          </property>
           <property name="text">
-           <string>Create/Publish</string>
+           <string extracomment="Create/Publish"/>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normalon>:/plugins/story/icons/interface.png</normalon>
+           </iconset>
           </property>
          </widget>
         </item>
@@ -594,8 +620,37 @@
        <layout class="QHBoxLayout" name="horizontalLayout_7">
         <item>
          <widget class="QPushButton" name="btnPreviousSlide">
+          <property name="toolTip">
+           <string>Move to Previous Slide</string>
+          </property>
           <property name="text">
-           <string>Previous</string>
+           <string extracomment="Previous"/>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normalon>:/plugins/story/icons/arrows-2.png</normalon>
+           </iconset>
+          </property>
+          <property name="flat">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btnMoveSooner">
+          <property name="toolTip">
+           <string>Move Slide Earlier</string>
+          </property>
+          <property name="text">
+           <string extracomment="Previous"/>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normalon>:/plugins/story/icons/arrows.png</normalon>
+           </iconset>
+          </property>
+          <property name="flat">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -607,9 +662,32 @@
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="btnNextSlide">
+         <widget class="QPushButton" name="btnMoveLater">
+          <property name="toolTip">
+           <string>Move Slide Later</string>
+          </property>
           <property name="text">
-           <string>Next</string>
+           <string extracomment="Next"/>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normalon>:/plugins/story/icons/arrows-3.png</normalon>
+           </iconset>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btnNextSlide">
+          <property name="toolTip">
+           <string>Move to Next Slide</string>
+          </property>
+          <property name="text">
+           <string extracomment="Next"/>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normalon>:/plugins/story/icons/arrows-1.png</normalon>
+           </iconset>
           </property>
          </widget>
         </item>
@@ -628,15 +706,31 @@
         </item>
         <item>
          <widget class="QPushButton" name="btnRemoveSlide">
+          <property name="toolTip">
+           <string>Remove Current Slide</string>
+          </property>
           <property name="text">
-           <string>Remove Slide</string>
+           <string extracomment="Remove Slide"/>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normalon>:/plugins/story/icons/interface-3.png</normalon>
+           </iconset>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QPushButton" name="btnAddSlide">
+          <property name="toolTip">
+           <string>Add Slide After Current</string>
+          </property>
           <property name="text">
-           <string>Add Slide</string>
+           <string extracomment="Add Slide"/>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normalon>:/plugins/story/icons/interface-2.png</normalon>
+           </iconset>
           </property>
          </widget>
         </item>
@@ -668,7 +762,7 @@
          <widget class="QLineEdit" name="txtSlideTitle">
           <property name="minimumSize">
            <size>
-            <width>300</width>
+            <width>400</width>
             <height>0</height>
            </size>
           </property>
@@ -736,6 +830,9 @@
             </disabled>
            </palette>
           </property>
+          <property name="toolTip">
+           <string>Slide Title</string>
+          </property>
          </widget>
         </item>
        </layout>
@@ -756,100 +853,9 @@
          </widget>
         </item>
         <item>
-         <widget class="QPlainTextEdit" name="txtSlideContent"/>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_12">
-        <item>
-         <widget class="QLabel" name="lblSlideZoom">
-          <property name="text">
-           <string>Zoom</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <spacer name="horizontalSpacer_10">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item>
-         <widget class="QSpinBox" name="spinSlideZoom">
-          <property name="palette">
-           <palette>
-            <active>
-             <colorrole role="Base">
-              <brush brushstyle="SolidPattern">
-               <color alpha="255">
-                <red>255</red>
-                <green>255</green>
-                <blue>255</blue>
-               </color>
-              </brush>
-             </colorrole>
-             <colorrole role="Window">
-              <brush brushstyle="SolidPattern">
-               <color alpha="255">
-                <red>255</red>
-                <green>255</green>
-                <blue>255</blue>
-               </color>
-              </brush>
-             </colorrole>
-            </active>
-            <inactive>
-             <colorrole role="Base">
-              <brush brushstyle="SolidPattern">
-               <color alpha="255">
-                <red>255</red>
-                <green>255</green>
-                <blue>255</blue>
-               </color>
-              </brush>
-             </colorrole>
-             <colorrole role="Window">
-              <brush brushstyle="SolidPattern">
-               <color alpha="255">
-                <red>255</red>
-                <green>255</green>
-                <blue>255</blue>
-               </color>
-              </brush>
-             </colorrole>
-            </inactive>
-            <disabled>
-             <colorrole role="Base">
-              <brush brushstyle="SolidPattern">
-               <color alpha="255">
-                <red>255</red>
-                <green>255</green>
-                <blue>255</blue>
-               </color>
-              </brush>
-             </colorrole>
-             <colorrole role="Window">
-              <brush brushstyle="SolidPattern">
-               <color alpha="255">
-                <red>255</red>
-                <green>255</green>
-                <blue>255</blue>
-               </color>
-              </brush>
-             </colorrole>
-            </disabled>
-           </palette>
-          </property>
-          <property name="maximum">
-           <number>22</number>
+         <widget class="QPlainTextEdit" name="txtSlideContent">
+          <property name="toolTip">
+           <string>Slide Content (HTML allowed)</string>
           </property>
          </widget>
         </item>
@@ -949,15 +955,107 @@
             </disabled>
            </palette>
           </property>
+          <property name="toolTip">
+           <string>Longitude, Latitude</string>
+          </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="btnGetSlidePositionFromMap">
+         <widget class="QLabel" name="lblSlideZoom">
           <property name="text">
-           <string>Get From Map</string>
+           <string>Zoom</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSpinBox" name="spinSlideZoom">
+          <property name="palette">
+           <palette>
+            <active>
+             <colorrole role="Base">
+              <brush brushstyle="SolidPattern">
+               <color alpha="255">
+                <red>255</red>
+                <green>255</green>
+                <blue>255</blue>
+               </color>
+              </brush>
+             </colorrole>
+             <colorrole role="Window">
+              <brush brushstyle="SolidPattern">
+               <color alpha="255">
+                <red>255</red>
+                <green>255</green>
+                <blue>255</blue>
+               </color>
+              </brush>
+             </colorrole>
+            </active>
+            <inactive>
+             <colorrole role="Base">
+              <brush brushstyle="SolidPattern">
+               <color alpha="255">
+                <red>255</red>
+                <green>255</green>
+                <blue>255</blue>
+               </color>
+              </brush>
+             </colorrole>
+             <colorrole role="Window">
+              <brush brushstyle="SolidPattern">
+               <color alpha="255">
+                <red>255</red>
+                <green>255</green>
+                <blue>255</blue>
+               </color>
+              </brush>
+             </colorrole>
+            </inactive>
+            <disabled>
+             <colorrole role="Base">
+              <brush brushstyle="SolidPattern">
+               <color alpha="255">
+                <red>255</red>
+                <green>255</green>
+                <blue>255</blue>
+               </color>
+              </brush>
+             </colorrole>
+             <colorrole role="Window">
+              <brush brushstyle="SolidPattern">
+               <color alpha="255">
+                <red>255</red>
+                <green>255</green>
+                <blue>255</blue>
+               </color>
+              </brush>
+             </colorrole>
+            </disabled>
+           </palette>
+          </property>
+          <property name="toolTip">
+           <string>Zoom Level</string>
+          </property>
+          <property name="maximum">
+           <number>30</number>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btnGetSlidePositionFromMap">
+          <property name="toolTip">
+           <string>Get Position and Zoom from Canvas</string>
+          </property>
+          <property name="text">
+           <string extracomment="Get From Map"/>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normalon>:/plugins/story/icons/location-pin.png</normalon>
+           </iconset>
           </property>
          </widget>
         </item>
@@ -995,6 +1093,8 @@
    </layout>
   </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
  <connections/>
 </ui>

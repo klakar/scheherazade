@@ -14,7 +14,7 @@ version=0.1
 author=Klas Karlsson
 email=klaskarlsson@hotmail.com
 
-about=This is the about text...
+about=<b>QGIS Story</b><br>This plugin use the current project to create a series of slides with content that can be exported to a web story map.<br><br><i> Icons Designed by Freepik and distributed by Flaticon</i>
 
 tracker=https://github.com/klakar/scheherezade/bugs
 repository=https://github.com/klakar/scheherezade
