@@ -39,6 +39,7 @@ from qgis.core import QgsMessageLog, QgsPoint, QgsCoordinateTransform, QgsCoordi
 # Import other stuff
 import shutil, webbrowser
 from os import listdir
+import sys
 
 
 
@@ -309,29 +310,33 @@ class story:
     	global currentSlide, storyFile, storyTitle, slideTitle, slideContent, slideZoom, slidePosition
     	fileName = QFileDialog.getOpenFileName(None,self.tr(u"Open or create New story file"),os.path.expanduser('~'),"STORY files (*.story)")
     	if (os.path.isfile(fileName)):
-    		e = ET.parse(fileName)
-    		root = e.getroot()
-    		storyTitle = root.find("storyTitle").text
-    		self.dockwidget.txtStoryTitle.setText(root.find("storyTitle").text)
-    		titleList = list()
-    		for st in root.iter("slideTitle"):
-    			titleList.append(st.text)
-    		slideTitle = titleList
-    		contentList = list()
-    		for sc in root.iter("slideContent"):
-    			contentList.append(sc.text)
-    		slideContent = contentList
-    		zoomList = list()
-    		for sz in root.iter("slideZoom"):
-    			zoomList.append(int(sz.text))
-    		slideZoom = zoomList
-    		positionList = list()
-    		for sp in root.iter("slidePosition"):
-    			positionList.append(sp.text)
-    		slidePosition = positionList
-    		currentSlide = 0
-    		self.open_current_slide()
-    		#QMessageBox.information(self.iface.mainWindow(),self.tr(u"Message!"), "This is a file")
+    		try:
+    			e = ET.parse(fileName)
+    			root = e.getroot()
+    			storyTitle = root.find("storyTitle").text
+    			self.dockwidget.txtStoryTitle.setText(root.find("storyTitle").text)
+    			titleList = list()
+    			for st in root.iter("slideTitle"):
+    				titleList.append(st.text)
+    			slideTitle = titleList
+    			contentList = list()
+    			for sc in root.iter("slideContent"):
+    				contentList.append(sc.text)
+    			slideContent = contentList
+    			zoomList = list()
+    			for sz in root.iter("slideZoom"):
+    				zoomList.append(int(sz.text))
+    			slideZoom = zoomList
+    			positionList = list()
+    			for sp in root.iter("slidePosition"):
+    				positionList.append(sp.text)
+    			slidePosition = positionList
+    			currentSlide = 0
+    			self.open_current_slide()
+    			#QMessageBox.information(self.iface.mainWindow(),self.tr(u"Message!"), "This is a file")
+    		except:
+    			QMessageBox.warning(self.iface.mainWindow(),self.tr(u"Error!"), self.tr(u"The story file: %s\nCould not be opened!\n\n%s" % (fileName, sys.exc_info()[0])))
+    			fileName = ""
     		
     	else:
     		QMessageBox.information(self.iface.mainWindow(),self.tr(u"Message!"), self.tr(u"This file does not exist!"))
@@ -344,7 +349,7 @@ class story:
     	self.save_current_slide()
     	global storyTitle, storyStyle, storyBaseMap, slideTitle, slideContent, slideZoom, slidePosition, storyFile
     	if (storyFile == ""):
-    		fileName = QFileDialog.getOpenFileName(None,self.tr(u"Save New or Replace Current StoryFile"),os.path.expanduser('~'),"STORY files (*.story)")
+    		fileName = QFileDialog.getSaveFileName(None,self.tr(u"Save New or Replace Current StoryFile"),os.path.expanduser('~'),"STORY files (*.story)")
     		if fileName != "":
     			if not fileName.lower().endswith('.story'):
     				fileName += ".story"
