@@ -39,6 +39,7 @@ from qgis.core import QgsMessageLog, QgsPoint, QgsCoordinateTransform, QgsCoordi
 # Import other stuff
 import shutil, webbrowser
 from os import listdir
+import sys
 
 
 
@@ -476,12 +477,10 @@ class story:
     	sourcefiles = [f for f in listdir(os.path.join(os.path.dirname(os.path.realpath(__file__)),"storysource")) if os.path.isfile(os.path.join(os.path.join(os.path.dirname(os.path.realpath(__file__)),"storysource"), f))]
     	for sourcefile in sourcefiles:
     		if sourcefile.lower().endswith('.htm'):
-    			# TODO add thing to templates
-    			QgsMessageLog.logMessage(sourcefile, 'Story', QgsMessageLog.INFO)
+    			#QgsMessageLog.logMessage(sourcefile, 'Story', QgsMessageLog.INFO)
     			self.dockwidget.cmbStoryTemplate.addItem(sourcefile)
     		if sourcefile.lower().endswith('.css'):
-    			# TODO add thing to style
-    			QgsMessageLog.logMessage(sourcefile, 'Story', QgsMessageLog.INFO)
+    			#QgsMessageLog.logMessage(sourcefile, 'Story', QgsMessageLog.INFO)
     			self.dockwidget.cmbStoryStyle.addItem(sourcefile)
     
     #--------------------------------------------------------------------------
