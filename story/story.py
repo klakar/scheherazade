@@ -41,6 +41,8 @@ import shutil, webbrowser
 from os import listdir
 import sys
 
+# Import layer to openlayers 3 layers...
+import layer2ol3
 
 
 class story:
@@ -385,9 +387,11 @@ class story:
     	storyFolder = QFileDialog.getExistingDirectory(None,self.tr(u"Select folder to generate story"),os.path.expanduser('~'))
     	if (storyFolder != ""):
     		storyTitle = self.dockwidget.txtStoryTitle.text()
+    		qgisLayers = layer2ol3.iterate(u"%s" % storyFolder)
     		sf = open( os.path.join(os.path.dirname(os.path.realpath(__file__)),"storysource/%s" % (self.dockwidget.cmbStoryTemplate.currentText())), 'r')
     		storyHtml = sf.read()
     		storyHtml = storyHtml.replace("{{storyTitle}}", storyTitle)
+    		storyHtml = storyHtml.replace("{{qgisLayers}}", qgisLayers)
     		slideDivs = ""
     		slideList = ""
     		zoomList = ""
@@ -547,5 +551,5 @@ class story:
             self.dockwidget.btnMoveSooner.clicked.connect(self.move_sooner)
             self.dockwidget.btnClearFile.clicked.connect(self.clear_story_file)
             
-            
+            #QMessageBox.information(self.iface.mainWindow(),self.tr(u"Message!"), layer2ol3.iterate(u"%s" % publishPath))
 

@@ -23,7 +23,7 @@
         layers: [
           new ol.layer.Tile({
             source: new ol.source.OSM()
-          })
+          }){{qgisLayers}}
         ],
         view: new ol.View({
           center: ol.proj.fromLonLat({{startPosition}}), //Start Position  [lon, lat]]

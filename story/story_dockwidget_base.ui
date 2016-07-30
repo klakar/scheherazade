@@ -1121,8 +1121,10 @@
        </font>
       </property>
       <property name="plainText">
-       <string>Testing Comments (build 2016-07-27):
-- No User Layers implemented yet!
+       <string>Testing Comments (build 2016-07-30):
+- ALL active vector layers exported as un-styled GeoJSON and included in story
+- No Raster layers... yet!
+- &quot;Option&quot; not yet implemented!
 - Advance story by clicking on title in web browser.
 - Templates and styles are in plugin folder &quot;storysource&quot;. Can be edited and more added!
 
