@@ -357,25 +357,25 @@ class story:
     				fileName += ".story"
     			self.dockwidget.txtStoryFile.setText(fileName)
     			storyFile = fileName
-    	else:
-    		storyTitle = self.dockwidget.txtStoryTitle.text()
-    		storyStyle = self.dockwidget.cmbStoryStyle.currentText()
-    		storyTemplate = self.dockwidget.cmbStoryTemplate.currentText()
-    		storyFile = self.dockwidget.txtStoryFile.text()
-    		storyText = u"<?xml version=\"1.0\"?>\n"
-    		storyText += u"<story>\n<storyTitle>%s</storyTitle>\n" % (storyTitle)
-    		storyText += u"<storyStyle>%s</storyStyle>\n" % (storyStyle)
-    		storyText += u"<storyTemplate>%s</storyTemplate>\n" % (storyTemplate)
-    		storyText += u"<slides>\n"
-    		for x in range(0, len(slideTitle)):
-    			storyText += u"<slide id=\"%s\">\n" % (x)
-    			storyText += u"<slideTitle>%s</slideTitle>\n" % (slideTitle[x])
-    			storyText += u"<slideContent>%s</slideContent>\n" % (slideContent[x])
-    			storyText += u"<slideZoom>%s</slideZoom>\n" % (slideZoom[x])
-    			storyText += u"<slidePosition>%s</slidePosition>\n" % (slidePosition[x])
-    			storyText += u"</slide>\n"
-    		storyText += u"</slides>\n"
-    		storyText += u"<storyFile>%s</storyFile>\n</story>" % (storyFile)
+    	storyTitle = self.dockwidget.txtStoryTitle.text()
+    	storyStyle = self.dockwidget.cmbStoryStyle.currentText()
+    	storyTemplate = self.dockwidget.cmbStoryTemplate.currentText()
+    	storyFile = self.dockwidget.txtStoryFile.text()
+    	storyText = u"<?xml version=\"1.0\"?>\n"
+    	storyText += u"<story>\n<storyTitle>%s</storyTitle>\n" % (storyTitle)
+    	storyText += u"<storyStyle>%s</storyStyle>\n" % (storyStyle)
+    	storyText += u"<storyTemplate>%s</storyTemplate>\n" % (storyTemplate)
+    	storyText += u"<slides>\n"
+    	for x in range(0, len(slideTitle)):
+    		storyText += u"<slide id=\"%s\">\n" % (x)
+    		storyText += u"<slideTitle>%s</slideTitle>\n" % (slideTitle[x])
+    		storyText += u"<slideContent>%s</slideContent>\n" % (slideContent[x])
+    		storyText += u"<slideZoom>%s</slideZoom>\n" % (slideZoom[x])
+    		storyText += u"<slidePosition>%s</slidePosition>\n" % (slidePosition[x])
+    		storyText += u"</slide>\n"
+    	storyText += u"</slides>\n"
+    	storyText += u"<storyFile>%s</storyFile>\n</story>" % (storyFile)
+    	if (storyFile != ""):
     		f = open(storyFile,'w')
     		f.write(storyText.encode('utf-8'))
     		f.close()
