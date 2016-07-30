@@ -1122,10 +1122,11 @@
       </property>
       <property name="plainText">
        <string>Testing Comments (build 2016-07-30):
-- ALL active vector layers exported as un-styled GeoJSON and included in story
-- No Raster layers... yet!
-- &quot;Option&quot; not yet implemented!
-- Advance story by clicking on title in web browser.
+- ALL active vector layers exported to destination folder as un-styled GeoJSON and included in story
+- Rasterlayers in jpg or png exported to destination folder! (TIFF not supported by Open Layers 3)
+- WMS Layers also added as layers!
+- &quot;Option&quot; -- not yet implemented!
+- Advance story by clicking on title.
 - Templates and styles are in plugin folder &quot;storysource&quot;. Can be edited and more added!
 
 Send comments to: klaskarlsson@hotmail.com</string>
