@@ -1128,6 +1128,7 @@
 - &quot;Option&quot; -- not yet implemented!
 - Advance story by clicking on title.
 - Templates and styles are in plugin folder &quot;storysource&quot;. Can be edited and more added!
+- Use "python -m SimpleHTTPServer" from Story folder and http://localhost:8000 for support in Chrome/Edge/Safari
 
 Send comments to: klaskarlsson@hotmail.com</string>
       </property>
