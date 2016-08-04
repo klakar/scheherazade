@@ -15,3 +15,7 @@ The story is styled with selectable, and customisable css templates, and based o
 This is **not** production ready!!!
 
 It might be Beta, soon...
+
+To try, you can grab the zip and un-pack into your QGIS plugins folder.
+
+(https://github.com/klakar/scheherazade/raw/master/story/story.zip)
