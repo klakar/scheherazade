@@ -533,6 +533,31 @@ class story:
     		if sourcefile.lower().endswith('.css'):
     			#QgsMessageLog.logMessage(sourcefile, 'Story', QgsMessageLog.INFO)
     			self.dockwidget.cmbStoryStyle.addItem(sourcefile)
+    			
+    # Clear and Reset Story
+    def story_clear(self):
+    	# If you are sure?
+    	reply = QMessageBox.question(self.iface.mainWindow(), self.tr(u'Continue?'), self.tr('Reset Story Completely?'), QMessageBox.Yes, QMessageBox.No)
+    	if reply == QMessageBox.Yes:
+    		global currentSlide, slideTitle, slideOption, slideContent, slidePosition, slideZoom, storyTitle
+    		del slideTitle[:]
+    		#del slideOption[:]
+    		del slideContent[:]
+    		del slidePosition[:]
+    		del slideZoom[:]
+    		self.dockwidget.cmbSlideOption.setCurrentIndex(0)
+    		slideOption[0] = self.dockwidget.cmbSlideOption.currentText()
+    		publishPath = os.path.expanduser('~')
+    		self.dockwidget.txtStoryTitle.setText(self.tr("The main Story Title"))
+    		self.clear_story_file()
+    		currentSlide = 0
+    		storyTitle = ""
+    		slideTitle.insert(currentSlide, self.tr("Slide Title"))
+    		slideContent.insert(currentSlide, self.tr("Content"))
+    		slideZoom.insert(currentSlide, self.get_current_zoom())
+    		slidePosition.insert(currentSlide, self.get_current_map())
+    		self.open_current_slide()
+    		
     
     #--------------------------------------------------------------------------
     def run(self):
@@ -584,13 +609,14 @@ class story:
             slideZoom.insert(currentSlide, self.get_current_zoom())
             slidePosition.insert(currentSlide, self.get_current_map())
             self.open_current_slide()
-            QgsMessageLog.logMessage("current slide option: %s" % (self.dockwidget.cmbSlideOption.currentText()), 'Story', QgsMessageLog.INFO)
+            #QgsMessageLog.logMessage("current slide option: %s" % (self.dockwidget.cmbSlideOption.currentText()), 'Story', QgsMessageLog.INFO)
             
             self.read_templates_and_styles()
             
             """ Catchers for panel button clicks
             each catch must have corresponding def name():
             """
+            self.dockwidget.btnStoryReset.clicked.connect(self.story_clear)
             self.dockwidget.btnPreviousSlide.clicked.connect(self.navigatePrevious)
             self.dockwidget.btnNextSlide.clicked.connect(self.navigateNext)
             self.dockwidget.btnRemoveSlide.clicked.connect(self.slide_remove)

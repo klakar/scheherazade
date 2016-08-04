@@ -30,6 +30,9 @@
    <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="1">
      <widget class="QTabWidget" name="tabWidget">
+      <property name="contextMenuPolicy">
+       <enum>Qt::DefaultContextMenu</enum>
+      </property>
       <property name="layoutDirection">
        <enum>Qt::LeftToRight</enum>
       </property>
@@ -46,7 +49,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>4</number>
+       <number>1</number>
       </property>
       <property name="iconSize">
        <size>
@@ -390,6 +393,44 @@
            </layout>
           </item>
           <item>
+           <widget class="Line" name="line">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_10">
+            <item>
+             <widget class="QLabel" name="lblStoryClear">
+              <property name="text">
+               <string>Reset All</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_3">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QPushButton" name="btnStoryReset">
+              <property name="text">
+               <string>Story Reset</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
            <spacer name="verticalSpacer_3">
             <property name="orientation">
              <enum>Qt::Vertical</enum>
@@ -517,6 +558,9 @@
             </item>
             <item>
              <widget class="QComboBox" name="cmbSlideOption">
+              <property name="toolTip">
+               <string>Style Option (if supported by css-file)</string>
+              </property>
               <item>
                <property name="text">
                 <string>Default</string>
@@ -524,47 +568,42 @@
               </item>
               <item>
                <property name="text">
-                <string>Option1</string>
+                <string notr="true">A</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Option2</string>
+                <string notr="true">B</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Option3</string>
+                <string notr="true">C</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Option4</string>
+                <string notr="true">D</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Option5</string>
+                <string notr="true">E</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Option6</string>
+                <string notr="true">F</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Option7</string>
+                <string notr="true">G</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Option8</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Option9</string>
+                <string notr="true">H</string>
                </property>
               </item>
              </widget>
@@ -719,8 +758,17 @@
             </item>
             <item>
              <widget class="QPlainTextEdit" name="txtSlideContent">
+              <property name="focusPolicy">
+               <enum>Qt::TabFocus</enum>
+              </property>
               <property name="toolTip">
                <string>Slide Content (HTML allowed)</string>
+              </property>
+              <property name="tabChangesFocus">
+               <bool>false</bool>
+              </property>
+              <property name="textInteractionFlags">
+               <set>Qt::LinksAccessibleByKeyboard|Qt::LinksAccessibleByMouse|Qt::TextBrowserInteraction|Qt::TextEditable|Qt::TextEditorInteraction|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
               </property>
              </widget>
             </item>
@@ -1188,18 +1236,20 @@ Save files will likely not be compatible with newer test versions!
 Testing Comments (build 2016-08-04):
 - ALL active vector layers exported to destination folder as un-styled GeoJSON and included in story
 - Rasterlayers in jpg or png exported to destination folder! (TIFF not supported by Open Layers 3)
+- Something is weired in Windows...
 - WMS Layers also added as layers! (And depend on OL3 support)
 - Advance story by clicking on title.
 - Templates and styles are in plugin folder &quot;storysource&quot;. Can be edited and more added!
 - Quick changes to style in CSS tab
-- Only story and style changes (not template or style source) is saved to story file.
+- Only story and style changes (not template or style source) are saved to story file.
 - Use &quot;python -m SimpleHTTPServer&quot; from Story folder and http://localhost:8000 for support in Chrome/Edge/Safari
+- For Python 3 clients: &quot;python -m http.server&quot;
 
 On the TODO list:
 - Start Python Web Server automatically, or with option to view source
 - Generate start scripts for Linux/Win/Mac to start presentation in web server (require python on client)
 - More (and nicer) templates and styles
-- Probably a few bugs
+- Probably a few bugs to eliminate and other irritations
 
 Not on TODO list:
 - Style Vector Layer (OL3 not supporting SLD, yet)

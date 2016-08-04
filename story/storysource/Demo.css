@@ -1,0 +1,104 @@
+/* Styles for storymap.html by Klas Karlsson */
+      body{
+        padding: 0;
+        margin: 0;
+        font-family: Arial;
+        font-size: 18px;
+      }
+      .map:-moz-full-screen {
+        height: 100%;
+      }
+      .map:-webkit-full-screen {
+        height: 100%;
+      }
+      .map:-ms-fullscreen {
+        height: 100%;
+      }
+      .map:fullscreen {
+        height: 100%;
+      }
+      .ol-rotate {
+        top: 3em;
+      }
+      .map {
+        height: 100%;
+        width: 100%;
+        position: absolute;
+        z-index: 0;
+      }
+      .slide {
+        z-index: 2;
+        position: absolute;
+        bottom: 50px;
+        left: 10%;
+        margin: auto;
+        width: 80%;
+        background-color: rgba(255, 255, 255, 0.8);
+        text-align: left;
+        visibility: hidden;
+        padding: 20px;
+	border-radius: 25px;
+	padding: 20px;
+	border: 2px solid black;
+      
+      }
+      .A {
+	left: 5%;
+	bottom: auto;
+	top: 40%;
+	width: 30%;
+      }
+      .B {
+	left: auto;
+	right: 5%;
+	width: 30%;
+	background-color: rgba(100, 0, 0, 0.6);
+	color: white;
+	border-radius: 0px;
+	border: 5px solid red;
+      }
+      .C {
+	
+      }
+      .D {
+	left: 30%;
+	width: 40%;
+	bottom: auto;
+	top: 25%;
+	background-color: rgba(255,255,255,0.9)
+      }
+      .D li {
+	font-size: 24px;
+	font-weight: bold;
+      }
+      .D H1 {
+	text-align: center;
+      }
+      H1 {
+        font-size: 40pt;
+      }
+      p {
+        
+      }
+      TABLE {
+	width: 100%;
+      }
+      TD {
+	vertical-align: top;
+      }
+
+      .storyTitle {
+        font-family: Arial;
+        font-size: 44pt;
+        font-weight: bold;
+        color: white;
+        background-color: rgba(0,0,0,.5);
+        z-index: 3;
+        position: absolute;
+        top: 20px;
+        left: 10%;
+        width: 80%;
+        text-align: center;
+        padding: 5px;
+      
+      }
