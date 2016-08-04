@@ -17,3 +17,4 @@ This is **not** production ready!!!
 It might be Beta, soon...
 
 To try, you can grab the zip and un-pack into your QGIS plugins folder.
+(https://github.com/klakar/scheherazade/blob/master/story/story.zip)
