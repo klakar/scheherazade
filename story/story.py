@@ -525,7 +525,7 @@ class story:
     # Populate Templates and Styles with htm and css files from storysource folder
     def read_templates_and_styles(self):
     	global storyTemplate, storyStyle
-    	sourcefiles = [f for f in listdir(os.path.join(os.path.dirname(os.path.realpath(__file__)),"storysource")) if os.path.isfile(os.path.join(os.path.join(os.path.dirname(os.path.realpath(__file__)),"storysource"), f))]
+    	sourcefiles = sorted([f for f in listdir(os.path.join(os.path.dirname(os.path.realpath(__file__)),"storysource")) if os.path.isfile(os.path.join(os.path.join(os.path.dirname(os.path.realpath(__file__)),"storysource"), f))])
     	for sourcefile in sourcefiles:
     		if sourcefile.lower().endswith('.htm'):
     			#QgsMessageLog.logMessage(sourcefile, 'Story', QgsMessageLog.INFO)
