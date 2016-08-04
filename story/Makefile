@@ -43,7 +43,7 @@ PLUGINNAME = story
 
 PY_FILES = \
 	__init__.py \
-	story.py story_dockwidget.py layer2ol3.py
+	story.py story_dockwidget.py layer2ol3.py startWebServer.py
 
 UI_FILES = story_dockwidget_base.ui
 

@@ -1,6 +1,7 @@
 <RCC>
     <qresource prefix="/plugins/story" >
         <file>icon.png</file>
+        <file>icons/book.png</file>
         <file>icons/arrows-3.png</file>
         <file>icons/interface-3.png</file>
         <file>icons/arrows-2.png</file>
@@ -12,6 +13,10 @@
         <file>icons/interface-1.png</file>
         <file>icons/interface.png</file>
         <file>icons/arrows.png</file>
+        <file>icons/app.png</file>
+        <file>icons/cogwheel.png</file>
+        <file>icons/interface-9.png</file>
+        <file>icons/multimedia.png</file>
         <file>icons/bad-cross-educational-sign.png</file>
     </qresource>
 </RCC>
