@@ -346,7 +346,7 @@ class story:
 
     			contentList = list()
     			for sc in root.iter("slideContent"):
-    				contentList.append(sc.text)
+    				contentList.append(sc.text.replace("%%%","<").replace("!!!","&"))
     			slideContent = contentList
 
     			zoomList = list()
@@ -402,7 +402,7 @@ class story:
     		storyText += u"<slide id=\"%s\">\n" % (x)
     		storyText += u"<slideTitle>%s</slideTitle>\n" % (slideTitle[x])
     		storyText += u"<slideOption>%s</slideOption>\n" % (slideOption[x])
-    		storyText += u"<slideContent>%s</slideContent>\n" % (slideContent[x])
+    		storyText += u"<slideContent>%s</slideContent>\n" % (slideContent[x].replace("<","%%%").replace("&","!!!"))
     		storyText += u"<slideZoom>%s</slideZoom>\n" % (slideZoom[x])
     		storyText += u"<slidePosition>%s</slidePosition>\n" % (slidePosition[x])
     		storyText += u"</slide>\n"
