@@ -1264,5 +1264,8 @@ Send comments to: klaskarlsson@hotmail.com</string>
    </layout>
   </widget>
  </widget>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
  <connections/>
 </ui>

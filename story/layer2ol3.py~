@@ -51,12 +51,13 @@ def iterate(publishPath):
 				ol3layers += u'\n ,\n new ol.layer.Tile({\n  title: "%s",\n source: new ol.source.TileWMS({\n  url: "%s",\n  params: { layers: "%s" }\n })\n })' % (canvasLayer.name(), sourceDict[u'url'], sourceDict[u'layers'])
 
 			# Image layer (only supported formats work in browser i.e. GeoTiff doesn't work!)
-			if canvasLayer.rasterType() == 2:
+			if canvasLayer.rasterType() == 1:
 				sourceString = canvasLayer.source()
 				approvedFormat = (".png", ".jpg") # only accept jpg and png files!
 				if sourceString.lower().endswith(approvedFormat):
 					# Copy rasterfile to publish directory
-					copy2(sourceString, os.path.join(os.path.dirname(publishPath+"/"), '%s.%s' % (canvasLayer.name(), sourceString[-4:] ))) 
+					destinationFileName = canvasLayer.name() + sourceString[-4:]
+					copy2(sourceString, os.path.join(os.path.dirname(publishPath+"/"), destinationFileName )) 
 					layerCrs = canvasLayer.crs().authid().split(":")[1]
 					transf = QgsCoordinateTransform( QgsCoordinateReferenceSystem(int(layerCrs)), QgsCoordinateReferenceSystem(4326) )
 					minX = canvasLayer.extent().xMinimum()
@@ -67,7 +68,7 @@ def iterate(publishPath):
 					pointUR = transf.transform(QgsPoint(maxX, maxY))
 					layerExtent = str(pointLL.x())+","+str(pointLL.y())+","+str(pointUR.x())+","+str(pointUR.y())
 					layerSize = str(canvasLayer.width()) +","+ str(canvasLayer.height())
-					ol3layers += u',\n new ol.layer.Image({\n  source: new ol.source.ImageStatic({\n  url: "%s",\n  imageExtent: ol.extent.applyTransform([%s], ol.proj.getTransform("EPSG:4326", "EPSG:3857"))\n })})' % (sourceString, layerExtent)
+					ol3layers += u',\n new ol.layer.Image({\n  source: new ol.source.ImageStatic({\n  url: "%s",\n  imageExtent: ol.extent.applyTransform([%s], ol.proj.getTransform("EPSG:4326", "EPSG:3857"))\n })})' % (destinationFileName, layerExtent)
 					#QMessageBox.information(qgis.utils.iface.mainWindow(),(u"Message!"), sourceDict[u'url'])
 	return ol3layers
 

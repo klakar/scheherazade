@@ -51,7 +51,7 @@ def iterate(publishPath):
 				ol3layers += u'\n ,\n new ol.layer.Tile({\n  title: "%s",\n source: new ol.source.TileWMS({\n  url: "%s",\n  params: { layers: "%s" }\n })\n })' % (canvasLayer.name(), sourceDict[u'url'], sourceDict[u'layers'])
 
 			# Image layer (only supported formats work in browser i.e. GeoTiff doesn't work!)
-			if canvasLayer.rasterType() == 2:
+			if canvasLayer.rasterType() > 3:
 				sourceString = canvasLayer.source()
 				approvedFormat = (".png", ".jpg") # only accept jpg and png files!
 				if sourceString.lower().endswith(approvedFormat):
