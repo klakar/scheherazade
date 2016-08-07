@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8"/>
+    <link rel="stylesheet" href="http://openlayers.org/en/v3.17.1/css/ol.css" type="text/css">
+    <link rel="stylesheet" href="story.css" /><!-- Story styles -->
+    <script src="http://openlayers.org/en/v3.17.1/build/ol.js" type="text/javascript"></script>
+    <title>{{storyTitle}}</title>
+  </head>
+  <body onload="init()">
+    <div id="map" class="map"></div>
+    
+    <div id="title" class="storyTitle">{{storyTitle}}</div> <!-- Story Title string-->
+    
+    {{slideDivs}} <!-- Slide Div with id= "id" + currentSlide id and class="slide"-->
+
+    <script type="text/javascript">
+      var attribution = new ol.Attribution({
+        html: 'Tiles &copy; <a href="http://services.arcgisonline.com/ArcGIS/' +
+        'rest/services/World_Topo_Map/MapServer">ArcGIS</a>'
+      });
+      var map = new ol.Map({
+        target: 'map',
+        controls: [],
+        layers: [
+          new ol.layer.Tile({
+            source: new ol.source.XYZ({
+              attributions: [attribution],
+              url: 'http://server.arcgisonline.com/ArcGIS/rest/services/' +
+              'World_Terrain_Base/MapServer/tile/{z}/{y}/{x}'
+            })
+          }){{qgisLayers}}
+        ],
+        view: new ol.View({
+          center: ol.proj.fromLonLat({{startPosition}}), //Start Position  [lon, lat]]
+          zoom: {{startZoom}} // Start Zoom 8
+        })
+      });
+      
+      function init() {
+        //window.alert("Test");
+        var slides = [{{slideList}}]; // slide list "id0", "id1"
+        var slideZoom = [{{zoomList}}]; // Zoom list 8, 11, 9
+        var slidePosition = [{{positionList}}]; // Position list [lon1, lat1],[lon2,lat2]
+        var currentSlide = 0;
+        var titleDiv = document.getElementById("title");
+        titleDiv.onclick = function() {
+          for (var x = 0; x < slides.length; x++) {
+            if (x == currentSlide) {
+               document.getElementById(slides[x]).style.visibility = "visible";	
+            } else {
+            	document.getElementById(slides[x]).style.visibility = "hidden";
+            }
+          };
+          doNext(ol.proj.fromLonLat(slidePosition[currentSlide]), slideZoom[currentSlide]);
+          currentSlide += 1;
+          if ( currentSlide == slides.length ) {
+          	currentSlide = 0;
+          }
+          
+          //window.alert(slides[x]);
+        };
+      }
+      function doNext(slidePosition, slideZoom) {
+        // bounce a litle...
+        var bounce = ol.animation.bounce({
+          duration : 2000,
+          resolution: map.getView().getResolution() * 4,
+          start: +new Date()
+        });
+        // start the pan at the current center of the map
+        var pan = ol.animation.pan({
+          duration: 2000,
+          source: map.getView().getCenter(),
+          start: +new Date()
+        });
+        var zoom = ol.animation.zoom({
+          duration: 2500,
+          resolution: map.getView().getResolution()
+        });
+        map.beforeRender(pan, bounce, zoom);
+        // when we set the center to the new location, the animated move will
+        // trigger the bounce, pan and zoom effects
+        //map.getView().setZoom(slideZoom);
+        //map.getView().setCenter(slidePosition, slideZoom);
+        map.setView(new ol.View({ center: slidePosition, zoom: slideZoom}));
+      }
+    </script>
+  </body>
+</html>
