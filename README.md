@@ -1,11 +1,15 @@
 # Project Scheherazade
 ## AKA - QGIS Story
-This is a QGIS plug-in that makes it possible to create web based geographic map stories. The stories requires only a web browser to view and an Internet connection.
+This is a QGIS plug-in that makes it possible to create web based geographic map stories. The stories requires only a web browser to view and an Internet connection (Firefox Browser works best).
+
+For full functionality you could start a web server in the story folder (http://localhost:8000):
+
+*python -m SimpleHTTPServer*
 
 Stories are created directly from a QGIS dockable panel and simple forms. Storys can be saved, edited, published and more. Storys are based on OpenLayers3 and supported active layers in the current project.
 
 - WMS (yes most WMS are supported)
-- Raster Layers (only png and jpg formats supported by web browser)
+- Raster Layers (only (png, gif and) jpg formats supported by web browser, and only in EPSG:3857)
 - Vector Layers (any and all active vector layers are exported as GeoJSON - **Warning**)
 
 **Note that web sources like WMS are not copied to the publish folder, but raster and vector layers are!**
