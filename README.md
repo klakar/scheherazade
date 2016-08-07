@@ -1,6 +1,10 @@
 # Project Scheherazade
 ## AKA - QGIS Story
-This is a QGIS plug-in that makes it possible to create web based geographic map stories. The stories requires only a web browser to view and an Internet connection.
+This is a QGIS plug-in that makes it possible to create web based geographic map stories. The stories requires only a web browser to view and an Internet connection (Firefox Browser works best).
+
+For full functionality you could start a web server in the story folder (http://localhost:8000):
+
+*python -m SimpleHTTPServer*
 
 Stories are created directly from a QGIS dockable panel and simple forms. Storys can be saved, edited, published and more. Storys are based on OpenLayers3 and supported active layers in the current project.
 
