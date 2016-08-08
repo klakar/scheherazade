@@ -45,10 +45,18 @@ def iterate(publishPath):
 		if canvasLayer.type() == 1:
 			
 			# WMS layer
-			if canvasLayer.rasterType() == 3:
+			if canvasLayer.providerType().lower() == "wms":
 				sourceString = canvasLayer.source()
 				sourceDict = dict(x.split('=') for x in sourceString.split('&'))
-				ol3layers += u'\n ,\n new ol.layer.Tile({\n  title: "%s",\n source: new ol.source.TileWMS({\n  url: "%s",\n  params: { layers: "%s" }\n })\n })' % (canvasLayer.name(), sourceDict[u'url'], sourceDict[u'layers'])
+				sourceList = sourceString.split('&')
+				#QMessageBox.information(qgis.utils.iface.mainWindow(),(u"Message!"), str(sourceList))
+				sourceLayers = "" # String to hold all wms layers
+				for item in sourceList:
+					if item.split('=')[0] == u'layers':
+						if len(sourceLayers) > 1:
+							sourceLayers += ","
+						sourceLayers += item.split('=')[1]
+				ol3layers += u'\n ,\n new ol.layer.Tile({\n  title: "%s",\n source: new ol.source.TileWMS({\n  url: "%s",\n  params: { layers: [%s] }\n })\n })' % (canvasLayer.name(), sourceDict[u'url'], sourceLayers)
 
 			# Image layer (only supported formats work in browser i.e. GeoTiff doesn't work!)
 			if canvasLayer.rasterType() < 3:
