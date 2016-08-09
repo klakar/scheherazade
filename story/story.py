@@ -23,7 +23,7 @@
 from PyQt4.QtCore import QSettings, QTranslator, qVersion, QCoreApplication, Qt
 from PyQt4.QtGui import QAction, QIcon, QMessageBox, QFileDialog
 # Initialize Qt resources from file resources.py
-import resources, math
+import resources, math, httpd, os, time
 
 # Import the code for the DockWidget
 from story_dockwidget import storyDockWidget
@@ -457,8 +457,16 @@ class story:
     		#shutil.copy(styleSource, styleDestination)
     		#startWebServer.stopServer()
     		#startWebServer.infolder(storyFolder)
-    		#webbrowser.open("http://127.0.0.1:8080")
-    		webbrowser.open(os.path.join(storyFolder, "index.htm"))
+                os.chdir(storyFolder)
+                srv = httpd.TinyWebServer()
+                srv.create("localhost", 8080)
+                srv.start()
+    		webbrowser.open("http://localhost:8080")
+    		#time.sleep(60)
+                wait_to_stop = QMessageBox.question(self.iface.mainWindow(), self.tr(u'Continue?'), self.tr('Press OK to stop Story Server.'), QMessageBox.Ok)
+                if wait_to_stop == QMessageBox.Ok:
+                	srv.stop()
+                #webbrowser.open(os.path.join(storyFolder, "index.htm"))
      		#QMessageBox.information(self.iface.mainWindow(),self.tr(u"Message!"), self.tr(u"Number of Slides: %s" % (len(slideTitle)))
     	
     # Store current slide form to variable

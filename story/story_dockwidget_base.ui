@@ -1230,20 +1230,21 @@
 There's NO guarantees for anything! 
 Save files will likely not be compatible with newer test versions!
 
-Testing Comments (build 2016-08-04):
+Testing Comments (build 2016-08-10):
 - ALL active vector layers exported to destination folder as un-styled GeoJSON and included in story
 - Rasterlayers in jpg or png exported to destination folder! (TIFF not supported by Open Layers 3)
+- Only raster in EPSG:3857 supported
 - Something is weired in Windows...
 - WMS Layers also added as layers! (And depend on OL3 support)
 - Advance story by clicking on title.
 - Templates and styles are in plugin folder &quot;storysource&quot;. Can be edited and more added!
 - Quick changes to style in CSS tab
 - Only story and style changes (not template or style source) are saved to story file.
-- Use &quot;python -m SimpleHTTPServer&quot; from Story folder and http://localhost:8000 for support in Chrome/Edge/Safari
+- Included Web Server presenting story on port 8080
+- Use &quot;python -m SimpleHTTPServer&quot; from Story folder and http://localhost:8000 if needed
 - For Python 3 clients: &quot;python -m http.server&quot;
 
 On the TODO list:
-- Start Python Web Server automatically, or with option to view source
 - Generate start scripts for Linux/Win/Mac to start presentation in web server (require python on client)
 - More (and nicer) templates and styles
 - Probably a few bugs to eliminate and other irritations

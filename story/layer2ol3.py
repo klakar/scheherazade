@@ -23,7 +23,7 @@
 """
 
 import qgis.core, os.path
-from qgis.core import QgsPoint, QgsCoordinateTransform, QgsCoordinateReferenceSystem
+from qgis.core import QgsPoint, QgsCoordinateTransform, QgsCoordinateReferenceSystem, QgsMapLayer
 from PyQt4.QtGui import QMessageBox
 from shutil import copy2
 
@@ -33,7 +33,7 @@ def iterate(publishPath):
 	for canvasLayer in reversed(canvasLayers):
 		
 		# DO if layer is Vector
-		if canvasLayer.type() == 0:
+		if canvasLayer.type() == QgsMapLayer.VectorLayer:
 			qgis.core.QgsVectorFileWriter.writeAsVectorFormat(canvasLayer, os.path.join(os.path.dirname(publishPath+"/"), '%s.json' % canvasLayer.name()), 'utf-8', canvasLayer.crs(), 'GeoJson') # Save layer to GeoJSON
 			
 			# SLD style is not implemented in Open Layers 3 so sld file is not used
